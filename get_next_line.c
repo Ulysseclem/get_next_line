@@ -6,7 +6,7 @@
 /*   By: uclement <uclement@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 15:46:10 by uclement          #+#    #+#             */
-/*   Updated: 2023/03/20 14:07:22 by uclement         ###   ########.fr       */
+/*   Updated: 2023/03/20 14:55:53 by uclement         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 int	ft_read()
 {
 	char *str = (char *) calloc(100, sizeof(char));
+	char *str2 = (char *) calloc(100, sizeof(char));
+
 	int	bit;
 	int i;
 	int fd = 3;
@@ -30,7 +32,7 @@ int	ft_read()
 	while (str[i] != '\n'&& str[i])
 		i++;
 	// printf("i=%d\n",i);
-	read(++fd, str, i);
+	read(++fd, str2, i);
 		printf("fd 2=%d\n",fd);
 
 
