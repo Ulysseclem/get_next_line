@@ -6,7 +6,7 @@
 /*   By: uclement <uclement@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 15:46:10 by uclement          #+#    #+#             */
-/*   Updated: 2023/03/20 14:55:53 by uclement         ###   ########.fr       */
+/*   Updated: 2023/03/22 16:34:52 by uclement         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,41 +14,62 @@
 #include<fcntl.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include "get_next_line.h"
 
-int	ft_read()
+
+void	read_stock(int fd, t_list **stash)
 {
-	char *str = (char *) calloc(100, sizeof(char));
-	char *str2 = (char *) calloc(100, sizeof(char));
+	char	*buffer;
+	int		count;
 
-	int	bit;
-	int i;
-	int fd = 3;
-
-	i = 0;
-	bit = 15;
-	read(fd, str, bit);
-	printf("fd 1=%d\n",fd);
-
-	while (str[i] != '\n'&& str[i])
-		i++;
-	// printf("i=%d\n",i);
-	read(++fd, str2, i);
-		printf("fd 2=%d\n",fd);
-
-
-	// printf("called read(%d, c, 10). returned that %d bytes were read.\n", fd, sz);
-	str[i] = '\0';
-	printf("Those bytes are as follows: %s\n", str);
-	return (bit);
+	count = 1;
+	buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
+	if (!buffer)
+		return;
+	while (!is_newline(*stash) && count != 0)
+	{
+		count = read(fd, buffer, BUFFER_SIZE);
+		buffer[count] = '\0';
+	}
 }
 
-int main()
+void	is_newline()
 {
-	int fd;
 	
-	fd = open("foo.txt", O_RDONLY| O_CREAT);
-	ft_read();
-	ft_read();
-	ft_read();
+}
 
+char	*get_next_line(int fd)
+{
+	static t_list	*stash = NULL;
+	char			*line;
+
+	/* test des erreurs potentiels*/
+	if(fd <0 || BUFFER_SIZE < 0 || read(fd, &line, 0) < 0)
+		return(NULL);
+
+	line = NULL;
+	// lire le fichier et le mettre dans la liste chainee
+	
+	read_stock(fd, &stash);
+	
+	// extract le stock vers le line
+	// nettoyer le stash
+	return(line);
+}
+
+int	main(void)
+{
+	int		fd;
+	char	*line;
+
+	fd = open("tests/two_lines_with_nl", O_RDONLY);
+	while (1)
+	{
+		line = get_next_line(fd);
+		printf("%s", line);
+		if (line == NULL)
+			break ;
+		free(line);
+	}
+	return (0);
 }
